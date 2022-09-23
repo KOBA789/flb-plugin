@@ -1,3 +1,31 @@
+//! Output Plugin bindings
+//!
+//! ```no_run
+//! struct Hello;
+//! impl flb_plugin::output::Plugin for Hello {
+//!     const NAME: &'static CStr = const_cstr!("hello");
+//!     const DESCRIPTION: &'static CStr = const_cstr!("hello plugin");
+//!
+//!     fn new(config: &output::Config) -> Self {
+//!         let param = config.get_property(const_cstr!("param"));
+//!         println!("[new] param: {:?}", param);
+//!         Hello
+//!     }
+//!
+//!     fn flush(&mut self, tag: &str, mut data: &[u8]) -> Result<(), flb_plugin::Error> {
+//!         let value = rmpv::decode::read_value_ref(&mut data).unwrap();
+//!         println!("[flush] tag: {tag}, data: {:?}", value);
+//!         Ok(())
+//!     }
+//!
+//!     fn exit(self) -> Result<(), flb_plugin::Error> {
+//!         println!("[exit]");
+//!         Ok(())
+//!     }
+//! }
+//! flb_plugin::output_plugin_proxy!(Hello);
+//! ```
+
 use std::{
     ffi::{c_void, CStr},
     marker::PhantomData,
@@ -12,11 +40,15 @@ use flb_plugin_sys::{
 
 use crate::{instance_from_ctx, Error};
 
+/// An accessor for plugin configurations
 pub struct Config {
     plugin: *const flbgo_output_plugin,
 }
 
 impl Config {
+    /// Returns the configuration property value.
+    ///
+    /// If the key is absent, this returns `None`.
     pub fn get_property(&self, key: &CStr) -> Option<&str> {
         unsafe {
             let plugin = self.plugin.as_ref()?;
@@ -32,15 +64,29 @@ impl Config {
     }
 }
 
+/// A trait for Fluent Bit output plugin
 pub trait Plugin {
+    /// The plugin name.
     const NAME: &'static CStr;
+
+    /// The plugin description.
     const DESCRIPTION: &'static CStr;
 
+    /// Creates a new plugin instance.
     fn new(config: &Config) -> Self;
+
+    /// Handles data passed from Fluent Bit.
+    ///
+    /// `data` is a MessagePack byte buffer.
     fn flush(&mut self, tag: &str, data: &[u8]) -> Result<(), Error>;
+
+    /// Cleans up the plugin instance.
     fn exit(self) -> Result<(), Error>;
 }
 
+/// A proxy object for [Plugin]
+///
+/// Use [crate::output_plugin_proxy] instead of using this directly.
 pub struct Proxy<P> {
     plugin: PhantomData<P>,
 }
@@ -124,6 +170,7 @@ where
     }
 }
 
+/// Defines proxy functions (`FLBPluginRegister`, `FLBPluginInit`, ...)
 #[macro_export]
 macro_rules! output_plugin_proxy {
     ($proxy:path) => {

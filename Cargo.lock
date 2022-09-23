@@ -136,12 +136,21 @@ dependencies = [
 name = "flb-plugin"
 version = "0.1.0"
 dependencies = [
- "flb-plugin-sys",
+ "flb-plugin-sys 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "flb-plugin-sys"
 version = "0.1.0"
+dependencies = [
+ "bindgen",
+]
+
+[[package]]
+name = "flb-plugin-sys"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f8f4d2575f8a005828d4c7b13797b3317cdf10a0591da4eff49a7a0fa856e0ce"
 dependencies = [
  "bindgen",
 ]

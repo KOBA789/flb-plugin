@@ -31,3 +31,11 @@ Fluent Bit v1.9.8
 [exit]
 [2022/09/24 02:40:31] [ info] [engine] service has stopped (0 pending tasks)
 ```
+
+## TODO
+
+- [ ] Documentation
+- [ ] Tests
+- [ ] Publish to crates.io
+
+Your contributions are welcome!

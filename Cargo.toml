@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+  "flb-plugin-sys",
+  "flb-plugin",
+  "hello",
+]

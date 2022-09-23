@@ -3,6 +3,8 @@ name = "flb-plugin"
 version = "0.1.0"
 authors = ["Hidekazu Kobayashi <kobahide789@gmail.com>"]
 edition = "2021"
+description = "Fluent Bit plugin binding for Rust"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

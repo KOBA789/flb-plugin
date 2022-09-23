@@ -34,8 +34,7 @@ Fluent Bit v1.9.8
 
 ## TODO
 
-- [ ] Documentation
 - [ ] Tests
-- [ ] Publish to crates.io
+- [ ] More documentation
 
 Your contributions are welcome!
